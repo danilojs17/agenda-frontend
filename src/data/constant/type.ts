@@ -1,0 +1,12 @@
+export const READ_TODO = 'READ_TODO'
+export const ADD_TODO = 'ADD_TODO'
+export const UPDATE_TODO = 'UPDATE_TODO'
+export const DELETE_TODO = 'DELETE_TODO'
+export const LOADING = 'LOADING'
+export const ERROR = 'ERROR'
+export const CHANGE_COLOR = 'CHANGE_COLOR'
+
+export const READ_QUOTE = 'READ_QUOTE'
+export const ADD_QUOTE = 'ADD_QUOTE'
+export const UPDATE_QUOTE = 'UPDATE_QUOTE'
+export const DELETE_QUOTE = 'DELETE_TODO'
