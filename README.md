@@ -1,56 +1,34 @@
-# Next.js & NextUI Template
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-This is a template for creating applications using Next.js 13 (pages directory) and NextUI (v2).
+## Getting Started
 
-## Technologies Used
-
-- [Next.js 13](https://nextjs.org/docs/getting-started)
-- [NextUI](https://nextui.org)
-- [Tailwind CSS](https://tailwindcss.com)
-- [Tailwind Variants](https://tailwind-variants.org)
-- [TypeScript](https://www.typescriptlang.org)
-- [Framer Motion](https://www.framer.com/motion)
-- [next-themes](https://github.com/pacocoursey/next-themes)
-
-## How to Use
-
-To create a new project based on this template using `create-next-app`, run the following command:
+First, run the development server:
 
 ```bash
-npx create-next-app -e https://github.com/nextui-org/next-pages-template
+npm run dev
+# or
+yarn dev
 ```
-## License
 
-Licensed under the [MIT license](https://github.com/nextui-org/next-pages-template/blob/main/LICENSE).
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
-###########################################################################################################
+[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
 
-PROYECTO PRUEBA DESARROLLADOR FRONTEND - TODO
+The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
-Description:
-En la prueba se desarrollo un app para la gestion de actividades de un usuario donde cuenta con las siguientes funcionalidades:
+## Learn More
 
-1 - Creacion de tarea
-2 - Visualizacion de tarea
-3 - Actualizacion de una tarea como su titulo, descripción y su estado
-4 - Eliminar una tarea
-4 - Filtro de tarea por titulo, descripción y por estado
+To learn more about Next.js, take a look at the following resources:
 
-ESTRUCTURA DEL PROYECTO Y ARQUITECTURA
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-Se esta usando la carpeta src como origen de toda la app, donde podemos encontrar las siguientes carpetas como:
-core: En esta carpeta se esta almacenando el contexto global de nuestra app y los hooks.
-data: Aquí tenemos una capa de datos donde tenemos las interfaces de nuestros componentes y funciones, tamebien tenemos las variables que se usan para el contexto global.
-pages: Aquí tenemos las paginas de nuestra app.
-shared: En esta carpeta almacenamos todos los archivos compartidos de nuestra app como los componentes, variables, fuentes, librerias y de más.
-styles: Aqui tenemos los estilos de la app.
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-Notas:
-Sobre la api https://dummyjson.com/docs/todos tuve unos incovenientes a la hora de realizar el crud.
+## Deploy on Vercel
 
-El metodo GET, no esta haciendo devuelta de un titulo o descripcion, lo cual tome la clave todo como descripción y le asigne una texto random al titulo, pero no es impedimento para crear una tarea con titulo y descripcion.
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-En el metodo POST, el resultado de la peticion solo es el userId y id del todo, lo cual tuve que usar las claves que vienen como parametro de mi función createToDo.
-
-En el metodo PUT, no podia actualizar una tarea creada por mi, la api me respondia que no existia un todo con el id que le pasaba como paramatro a la peticion, el metodo PUT me limitaba a solo enviar la clave completed, si enviaba alguna mas me daba error 404 - BadRequest, por lo tanto utilizo las claves que recibo como parametro para actualizar el titulo y descripcion.
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

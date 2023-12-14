@@ -1,57 +1,40 @@
-import { ERROR, LOADING, READ_QUOTE } from './../../../data/constant/type'
-import { IQuote, IQuoteState } from '@interface/context/quotes/Quotes'
+import { IQuoteState, IResQuote } from '@interface/context/quotes/Quotes'
 
-type Action = { type: typeof READ_QUOTE; payload: Array<IQuote>; }
-// | { type: 'ADD_TODO'; payload: IBodyToDo; }
-// | { type: 'UPDATE_TODO'; payload: IBodyToDo; }
-// | { type: 'DELETE_TODO'; payload: string; }
-| { type: typeof LOADING; payload: boolean; }
-| { type: typeof ERROR; payload: boolean; }
+type CreateQuoteOption = IResQuote & {
+  day: string;
+}
+
+type Action = { type: 'READ_QUOTE'; payload: CreateQuoteOption; }
+| { type: 'CREATE_QUOTE'; payload: IResQuote; }
+| { type: 'DELETE_QUOTE'; payload: IResQuote; }
+| { type: 'LOADING'; payload: boolean; }
+| { type: 'ERROR'; payload: boolean; }
 
 const QuoteReducer = (state: IQuoteState, action: Action) => {
   const { type, payload } = action
 
   const optionReducer: Record<string, (state: IQuoteState, payload: any) => IQuoteState> = {
-    READ_TODO: (state: IQuoteState, payload: Array<IQuote>): IQuoteState => {
+    READ_QUOTE: (state: IQuoteState, payload: CreateQuoteOption): IQuoteState => {
       return {
         ...state,
-        status: true,
-        list: payload
+        ...payload,
+        status: true
       }
     },
-    // ADD_TODO: (state: ITodoState, payload: IBodyToDo): ITodoState => {
-    //   const todos: Map<string, ITodoView> = new Map(state.todos.entries())
-
-    //   todos.set(payload.id, payload)
-
-    //   return {
-    //     ...state,
-    //     status: true,
-    //     todos
-    //   }
-    // },
-    // UPDATE_TODO: (state: ITodoState, payload: IBodyToDo): ITodoState => {
-    //   const todos: Map<string, ITodoView> = new Map(state.todos.entries())
-
-    //   todos.set(payload.id, payload)
-
-    //   return {
-    //     ...state,
-    //     status: true,
-    //     todos
-    //   }
-    // },
-    // DELETE_TODO: (state: ITodoState, payload: string): ITodoState => {
-    //   const todos: Map<string, ITodoView> = new Map(state.todos.entries())
-
-    //   todos.delete(payload)
-
-    //   return {
-    //     ...state,
-    //     status: true,
-    //     todos
-    //   }
-    // },
+    CREATE_QUOTE: (state: IQuoteState, payload: IResQuote): IQuoteState => {
+      return {
+        ...state,
+        ...payload,
+        status: true
+      }
+    },
+    DELETE_QUOTE: (state: IQuoteState, payload: IResQuote): IQuoteState => {
+      return {
+        ...state,
+        ...payload,
+        status: true
+      }
+    },
     LOADING: (state: IQuoteState, payload: boolean): IQuoteState => {
       return {
         ...state,
@@ -67,6 +50,12 @@ const QuoteReducer = (state: IQuoteState, action: Action) => {
     }
   }
 
-  return optionReducer[type](state, payload)
+  const optionType = optionReducer[type]
+
+  if (optionType) {
+    return optionType(state, payload)
+  }
+
+  return state
 }
 export default QuoteReducer

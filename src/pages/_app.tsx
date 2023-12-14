@@ -22,23 +22,25 @@ export default function App ({ Component, pageProps }: AppProps) {
   return (
     <NextUIProvider>
       <NextThemesProvider>
-        <ToastContainer
-          position="top-center"
-          autoClose={2000}
-          transition={Zoom}
-          hideProgressBar={true}
-          newestOnTop={false}
-          draggable={false}
-          closeOnClick
-          pauseOnHover
-          theme={'colored'}
-          limit={1}
-        />
-        <AxiosState>
-          <QuoteState>
-            {getLayout(<Component {...pageProps} />)}
-          </QuoteState>
-        </AxiosState>
+        <>
+          <ToastContainer
+            position="top-center"
+            autoClose={2000}
+            transition={Zoom}
+            hideProgressBar={true}
+            newestOnTop={false}
+            draggable={false}
+            closeOnClick
+            pauseOnHover
+            theme={'colored'}
+            limit={1}
+          />
+          <AxiosState>
+            <QuoteState>
+              {getLayout(<Component {...pageProps} />)}
+            </QuoteState>
+          </AxiosState>
+        </>
       </NextThemesProvider>
     </NextUIProvider>
   )

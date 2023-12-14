@@ -1,27 +1,26 @@
 import React, { FC, useEffect } from 'react'
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Textarea, Select, SelectItem, Input } from '@nextui-org/react'
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Input, SelectItem, Select } from '@nextui-org/react'
 import { IModal } from '@interface/components/modal/Modal'
 import { Controller, useForm } from 'react-hook-form'
-import { ITodoCrud } from '@interface/context/to-do/ToDo'
 import { Portal } from '../portal/Portal'
+import { IHandlerQuote, IQuote } from '@interface/context/quotes/Quotes'
 
-const ModalTodo: FC<IModal> = (props) => {
-  const { control, reset, handleSubmit, setValue } = useForm<ITodoCrud>()
+const ModalQuote: FC<IModal> = (props) => {
+  const { control, reset, handleSubmit, setValue } = useForm<IHandlerQuote>()
 
-  const onSubmit = (data: ITodoCrud) => {
+  const onSubmit = (data: IHandlerQuote) => {
     if (props.onAction) props.onAction(data)
     reset()
   }
 
   const options = {
-    create: 'Crear',
-    update: 'Actualizar',
+    program: 'Programar',
     delete: 'Eliminar'
   }
 
   useEffect(() => {
     Object.entries(props.defaultValue).forEach(([key, value]) => {
-      setValue(key as keyof ITodoCrud, typeof value === 'boolean' ? +value : value)
+      setValue(key as keyof IQuote, value)
     })
   }, [props.defaultValue, setValue])
 
@@ -37,97 +36,114 @@ const ModalTodo: FC<IModal> = (props) => {
           <ModalContent>
             {(onClose) => (
               <>
-                <ModalHeader className="flex flex-col gap-1">{`${options[props.defaultValue.action ?? 'create']}`} tarea</ModalHeader>
+                <ModalHeader className="flex flex-col gap-1">{`${options[props.option ?? 'Programar']}`} una cita</ModalHeader>
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <ModalBody>
                     {
-                      props.defaultValue.action !== 'delete'
+                      props.option !== 'delete'
                         ? <>
                           <Controller
-                            name='title'
-                            defaultValue={props.defaultValue.title ?? ''}
+                            name='Day'
                             control={control}
                             rules={{
                               required: true
                             }}
-                            render={({ field: { onChange, value }, formState: { isValid, errors } }) => (
-                              <Input
-                                isRequired
-                                type="text"
-                                label="Title"
-                                labelPlacement="inside"
-                                onChange={onChange}
-                                defaultValue={value}
+                            render={({ field: { onChange, value } }) => (
+                              <Select
+                                label="Day"
                                 className="w-full"
-                                isInvalid={isValid}
-                                errorMessage={errors.title?.message}
-                              />
+                                defaultSelectedKeys={[value]}
+                                isDisabled
+                              >
+                                {[
+                                  'Lunes',
+                                  'Martes',
+                                  'Miércoles',
+                                  'Jueves',
+                                  'Viernes'
+                                ].map((day) => (
+                                  <SelectItem
+                                    key={day.toLowerCase()}
+                                    value={day.toLowerCase()}
+                                  >
+                                    {day}
+                                  </SelectItem>
+                                ))}
+                              </Select>
                             )
                             }
                           />
                           <Controller
-                            name='description'
-                            defaultValue={props.defaultValue.description ?? ''}
+                            name='Hour'
+                            defaultValue={''}
                             control={control}
                             rules={{
-                              required: true
+                              validate: {
+                                dateRange: (value) => {
+                                  if (+value.split(':')[0] < 9) return false
+                                  if (+value.split(':')[0] > 17) return false
+
+                                  return true
+                                }
+                              }
                             }}
-                            render={({ field: { onChange, value }, formState: { isValid, errors } }) => (
-                              <Textarea
+                            render={({ field: { onChange, value }, fieldState: { invalid } }) => (
+                              <Input
                                 isRequired
-                                label="Descripcion"
-                                defaultValue={value}
-                                onChange={onChange}
+                                type='time'
+                                label="Hour"
                                 labelPlacement="inside"
-                                placeholder="Escribe una descripción"
+                                onChange={onChange}
+                                defaultValue={value}
                                 className="w-full"
-                                isInvalid={isValid}
-                                errorMessage={errors.description?.message}
+                                errorMessage={invalid ? 'El horario de atención es de 9:00 a 17:00' : ''}
                               />
                             )}
                           />
                           <Controller
-                            name='status'
-                            defaultValue={props.defaultValue.status ? +props.defaultValue.status : 0}
+                            name='Duration'
+                            defaultValue={''}
                             control={control}
                             rules={{
-                              required: true
+                              required: true,
+                              max: 90,
+                              min: 30
                             }}
-                            render={({ field: { onChange, value }, formState: { isValid, errors } }) => (
-                              <Select
+                            render={({ field: { onChange, value }, fieldState: { invalid } }) => (
+                              <Input
                                 isRequired
-                                isInvalid={isValid}
-                                errorMessage={errors.description?.message}
-                                items={[
-                                  { label: 'Completada', value: 1 },
-                                  { label: 'Pendiente', value: 0 }
-                                ]}
+                                type="number"
+                                label="Duration"
+                                labelPlacement="inside"
                                 onChange={onChange}
-                                defaultSelectedKeys={value.toString()}
-                                label="Estado"
-                                isDisabled={!(props.defaultValue.id)}
-                                placeholder="Seleccionar el estado"
+                                defaultValue={value}
                                 className="w-full"
-                              >
-                                {(item) => <SelectItem key={item.value}>{item.label}</SelectItem>}
-                              </Select>
-                            )}
+                                errorMessage={invalid ? 'La duracion de la cita debe ser entre 30 y 90 minutos.' : ''}
+                              />
+                            )
+                            }
                           />
                         </>
-                        : <p>¿Estás seguro de eliminar la tarea?</p>
+                        : <p>¿Estás seguro de eliminar la cita?</p>
                     }
                   </ModalBody>
                   <ModalFooter>
-                    <Button type='button' color="danger" variant="light" onClick={
-                      () => {
+                    <Button
+                      type='button'
+                      color="danger"
+                      variant="light"
+                      onClick={() => {
                         reset()
                         onClose()
-                      }
-                    }>
+                      }}
+                    >
                   Cancelar
                     </Button>
-                    <Button type='submit' color='primary'>
-                      {`${options[props.defaultValue.action ?? 'create']}`}
+                    <Button
+                      type='submit'
+                      color='primary'
+                    >
+                      {`${options[props.option ?? 'Programar']}`}
                     </Button>
                   </ModalFooter>
                 </form>
@@ -140,4 +156,4 @@ const ModalTodo: FC<IModal> = (props) => {
   )
 }
 
-export default ModalTodo
+export default ModalQuote

@@ -8,6 +8,7 @@ export default function Document () {
         <Main />
         <NextScript />
         <div id='spinner-portal'/>
+        <div id='modal-portal'/>
       </body>
     </Html>
   )

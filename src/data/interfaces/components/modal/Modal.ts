@@ -1,8 +1,9 @@
-import { ITodoCrud } from '@interface/context/to-do/ToDo'
+import { IHandlerQuote, IQuote } from '@interface/context/quotes/Quotes'
 
 export interface IModal {
   isOpen: boolean;
-  defaultValue: Partial<ITodoCrud>
   onOpenChange: () => void;
-  onAction: (data: ITodoCrud) => void;
+  defaultValue: Partial<IQuote>;
+  onAction: (data: IHandlerQuote) => void;
+  option: 'delete' | 'program';
 }
