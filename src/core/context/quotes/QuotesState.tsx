@@ -22,7 +22,7 @@ const QuoteState: FC<Children> = (props) => {
       })
       .catch((err) => {
         dispatch({ type: ERROR, payload: false })
-        showToast('error', err.message)
+        showToast('error', err.response.data.message)
       })
       .finally(() => {
         setTimeout(() => dispatch({ type: LOADING, payload: false }), 1000)
@@ -37,7 +37,7 @@ const QuoteState: FC<Children> = (props) => {
       })
       .catch((err) => {
         dispatch({ type: ERROR, payload: false })
-        showToast('error', err.message)
+        showToast('error', err.response.data.message)
       })
   }, [axios])
 
@@ -49,7 +49,7 @@ const QuoteState: FC<Children> = (props) => {
       })
       .catch((err) => {
         dispatch({ type: ERROR, payload: false })
-        showToast('error', err.message)
+        showToast('error', err.response.data.message)
       })
   }, [axios])
 

@@ -12,6 +12,12 @@ const Cont: FC<ICont> = (props) => {
     }
   }
 
+  const today = new Date()
+  const tomorrow = new Date(today)
+  const day = props.status ? 0 : 1
+  tomorrow.setDate(today.getDate() + day)
+  tomorrow.setHours(props.status ? 17 : 9, 0, 0, 0)
+
   return (
     <Countdown
       date={props.time}

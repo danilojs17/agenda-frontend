@@ -135,6 +135,7 @@ const ModalQuote: FC<IModal> = (props) => {
                       onClick={() => {
                         reset()
                         onClose()
+                        props.onClose()
                       }}
                     >
                   Cancelar

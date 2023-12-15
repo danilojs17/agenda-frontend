@@ -13,13 +13,16 @@ import Cont from '@components/global/cont/Cont'
 export default function IndexPage () {
   const { readQuotes, state, createQuotes, deleteQuotes } = useContext<IQuoteContext>(QuoteContext)
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
-  const { setShowTime, showTime, time } = useTimeTemp()
-  const [option, setOption] = useState<IHandlerQuote>({
-    option: 'program',
-    Day: '',
-    Duration: '',
-    Hour: ''
-  })
+  const { setOpenSystem, openSystem, time } = useTimeTemp()
+  const initialState = useMemo<IHandlerQuote>(() => {
+    return {
+      option: 'program',
+      Day: '',
+      Duration: '',
+      Hour: ''
+    }
+  }, [])
+  const [option, setOption] = useState<IHandlerQuote>(initialState)
 
   const quotes = useMemo<IQuoteState>(() => state, [state])
 
@@ -34,7 +37,8 @@ export default function IndexPage () {
   const handlerDay = useCallback(async (day: Set<Key>) => {
     const daySelection = Array.from(day).join(', ').replaceAll('_', ' ')
     readQuotes(daySelection)
-  }, [readQuotes])
+    setOption({ ...option, Day: daySelection })
+  }, [option, readQuotes])
 
   const handlerData = useCallback(({ option, ...data }: IHandlerQuote) => {
     const optionAvailable = {
@@ -46,8 +50,9 @@ export default function IndexPage () {
     if (!selectOption) return
     selectOption()
 
+    setOption(initialState)
     onClose()
-  }, [createQuotes, deleteQuotes, onClose])
+  }, [createQuotes, deleteQuotes, initialState, onClose])
 
   const deleteQuote = (quote: IQuote) => {
     setOption({ ...option, ...quote, option: 'delete' })
@@ -63,18 +68,18 @@ export default function IndexPage () {
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
       <Spinner open={state.loading} />
       {
-        showTime &&
+        openSystem &&
         <div className='flex gap-2 items-center'>
           <span>El sistema cierra en:</span>
           <Cont
-            handlerTime={setShowTime}
-            status={showTime}
+            handlerTime={setOpenSystem}
+            status={openSystem}
             time={time}
           />
         </div>
       }
       {
-        showTime
+        openSystem
           ? <>
             <Card className='min-w-[400px]'>
               <CardHeader>
@@ -132,7 +137,7 @@ export default function IndexPage () {
                 <CardBody>
                   <div className='flex flex-col gap-2'>
                     {
-                      quotes.scheduledAppoinments.map((quote, index) => (
+                      quotes.scheduledAppoinments.map((quote) => (
                         <>
                           <div className='flex justify-between'>
                             <span>Hora inicio: {quote.Hour}</span>
@@ -177,16 +182,17 @@ export default function IndexPage () {
             </div>
           </>
           : <Schedule
-            handlerTime={() => setShowTime(false)}
+            handlerTime={() => setOpenSystem(false)}
             time={time}
-            status={showTime}
+            status={openSystem}
           />
       }
 
       <ModalQuote
+        onClose={() => setOption(initialState)}
         isOpen={isOpen}
         option={option.option}
-        defaultValue={option}
+        defaultValue={{ ...option, Day: state.day }}
         onOpenChange={onOpenChange}
         onAction={handlerData}
       />
